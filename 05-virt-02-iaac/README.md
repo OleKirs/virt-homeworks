@@ -51,6 +51,35 @@ ___
 - Vagrant
 - Ansible
 
+#### Установка Oracle VirtualBox
+```shell
+sudo apt install virtualbox -y
+```
+#### Установка Vagrant из apt repository
+
+Установим зависимости для работы с дополнительными репозиториями:
+```shell
+sudo apt update
+sudo apt -y install apt-transport-https ca-certificates curl software-properties-common
+```
+  
+Добавим официальный репозиторий Vagrant в apt:
+```shell
+curl -fs https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+```
+  
+Обновим `APT` и установим `Vagrant`:
+```shell
+sudo apt update
+sudo apt install vagrant
+```
+  
+#### Установка "Ansible"
+```shell
+sudo apt install -y ansible
+```
+  
 *Приложить вывод команд установленных версий каждой из программ, оформленный в markdown.*
 
 ```shell
