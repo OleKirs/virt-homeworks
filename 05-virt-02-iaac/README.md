@@ -89,7 +89,7 @@ root@ubhost50:~# vagrant version
 Installed Version: 2.2.19
 Latest Version: 2.2.19
 
-You're running an up-to-date version of Vagrant!
+You''re running an up-to-date version of Vagrant!
 root@ubhost50:~# ansible --version
 ansible 2.9.6
   config file = /etc/ansible/ansible.cfg
@@ -166,7 +166,7 @@ or on a per folder basis within the Vagrantfile:
     server1.netology: this with a newly generated keypair for better security.
     server1.netology: 
     server1.netology: Inserting generated public key within guest...
-    server1.netology: Removing insecure key from the guest if it's present...
+    server1.netology: Removing insecure key from the guest if it''s present...
     server1.netology: Key inserted! Disconnecting and reconnecting using new SSH key...
 ==> server1.netology: Machine booted and ready!
 ==> server1.netology: Checking for guest additions in VM...
@@ -202,7 +202,11 @@ changed: [server1.netology]
 
 PLAY RECAP *********************************************************************
 server1.netology           : ok=7    changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+```
+  
+### Зайти внутрь ВМ, убедиться, что Docker установлен с помощью команды `docker ps`
 
+```shell
 sysadmin@ubhost50:~/VMs/hw5.2/vagrant$ vagrant ssh
 Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.4.0-91-generic x86_64)
 
@@ -217,8 +221,7 @@ This system is built by the Bento project by Chef Software
 More information can be found at https://github.com/chef/bento
 Last login: Thu Jan 27 18:01:25 2022 from 10.0.2.2
 ```
-  
-### Зайти внутрь ВМ, убедиться, что Docker установлен с помощью команды `docker ps`
+
   
 ```shell
 vagrant@server1:~$ docker ps
