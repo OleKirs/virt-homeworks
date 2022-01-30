@@ -150,11 +150,11 @@ a1d0c7532777: Pull complete
 Digest: sha256:a27fd8080b517143cbbbab9dfb7c8571c40d67d534bbdee55bd6c473f432b177
 Status: Downloaded newer image for centos:latest
 f28215c8ae8791b6514472424b1dfbb470eea6bd2fb94e440304c18059648156
+
 vagrant@server1:~/netology_nginx$ docker ps
 CONTAINER ID   IMAGE                           COMMAND                  CREATED          STATUS          PORTS                                   NAMES
 f28215c8ae87   centos:latest                   "/bin/bash"              14 seconds ago   Up 12 seconds                                           centos
 7a4f47427f97   olekirs/netology_nginx:1.21.6   "/docker-entrypoint.…"   3 hours ago      Up 3 hours      0.0.0.0:8080->80/tcp, :::8080->80/tcp   thirsty_lewin
-vagrant@server1:~/netology_nginx$
 ```
 #### Запустите второй контейнер из образа ***debian*** в фоновом режиме, подключив папку ```/data``` из текущей рабочей директории на хостовой машине в ```/data``` контейнера;
 
@@ -165,14 +165,15 @@ a834d7c95167: Pull complete
 Digest: sha256:4bb600434787c903886fe33526d19ff33114a33b433a4a4cdbdf9b8543f1ab5d
 Status: Downloaded newer image for debian:stretch
 docker.io/library/debian:stretch
+
 vagrant@server1:~/netology_nginx$ docker run -d -it --name debian -v $(pwd)/data:/data debian:stretch
 98ebde5c90e63e86fc33102bc35d2c5c8622e626b8696e1431d2d7eb185d5f32
+
 vagrant@server1:~/netology_nginx$ docker ps
 CONTAINER ID   IMAGE                           COMMAND                  CREATED          STATUS         PORTS                                   NAMES
 98ebde5c90e6   debian:stretch                  "bash"                   10 seconds ago   Up 9 seconds                                           debian
 f28215c8ae87   centos:latest                   "/bin/bash"              7 minutes ago    Up 7 minutes                                           centos
 7a4f47427f97   olekirs/netology_nginx:1.21.6   "/docker-entrypoint.…"   3 hours ago      Up 3 hours     0.0.0.0:8080->80/tcp, :::8080->80/tcp   thirsty_lewin
-vagrant@server1:~/netology_nginx$
 ```
 
 #### Подключитесь к первому контейнеру с помощью ```docker exec``` и создайте текстовый файл любого содержания в ```/data```;
@@ -231,5 +232,7 @@ ___
 
   
 ### Решение:
+
+[https://hub.docker.com/repository/docker/olekirs/ansible](https://hub.docker.com/repository/docker/olekirs/ansible)
 
 ---
