@@ -23,12 +23,65 @@ Hey, Netology
 </html>
 ```
 Опубликуйте созданный форк в своем репозитории и предоставьте ответ в виде ссылки на https://hub.docker.com/username_repo.
-  
+
 ### Решение:
   
-#### создайте свой репозиторий на https://hub.docker.com;
+репозиторий - [olekirs/netology_nginx:1.21.6](https://hub.docker.com/repository/docker/olekirs/netology_nginx)
 
-репозиторий - 
+Запуск на Docker:
+```shell
+vagrant@server1:~/netology_nginx$ docker run -d -p 8080:80 olekirs/netology_nginx:1.21.6
+Unable to find image 'olekirs/netology_nginx:1.21.6' locally
+1.21.6: Pulling from olekirs/netology_nginx
+5eb5b503b376: Pull complete 
+1ae07ab881bd: Pull complete 
+78091884b7be: Pull complete 
+091c283c6a66: Pull complete 
+55de5851019b: Pull complete 
+b559bad762be: Pull complete 
+cdbaff6c9faa: Pull complete 
+7b91ead5a882: Pull complete 
+Digest: sha256:bd208fa0653be6954ed044eab540d26005de60193c8331f943695a299661c9c7
+Status: Downloaded newer image for olekirs/netology_nginx:1.21.6
+7a4f47427f97d0d07967d3fdd188aa4ec4a92ce41715d580adaf423755d57454
+```
+  
+Проверим, что контейнер запущен и получим его ID:
+  
+```shell
+vagrant@server1:~/netology_nginx$ docker ps 
+CONTAINER ID   IMAGE                           COMMAND                  CREATED          STATUS         PORTS                                   NAMES
+7a4f47427f97   olekirs/netology_nginx:1.21.6   "/docker-entrypoint.…"   11 seconds ago   Up 9 seconds   0.0.0.0:8080->80/tcp, :::8080->80/tcp   thirsty_lewin
+```
+  
+Получим сетевой адрес запущённого контейнера:
+  
+```shell
+vagrant@server1:~/netology_nginx$ docker container inspect 7a4f47427f97 | grep \"IPAddress
+            "IPAddress": "172.17.0.2",
+                    "IPAddress": "172.17.0.2",
+```
+  
+Получим содержимое страницы http://172.17.0.2
+  
+```shell
+
+vagrant@server1:~/netology_nginx$ curl http://172.17.0.2
+<html>
+  <head>
+    Hey, Netology
+  </head>
+  <body>
+    <h1>I`m DevOps Engineer!</h1>
+  </body>
+</html>
+
+```
+
+Для проверки правильности работы Nginx получим страницу в браузере Firefox на хосте (порт хоста 8080 проброшен на порт 80 в контейнер)
+
+![Отображение стартовой сраницы Nginx в Firefox](imgs/5.3-Img01.png)
+
 ___
 ## Задача 2
 
