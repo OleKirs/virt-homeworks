@@ -80,7 +80,7 @@ vagrant@server1:~/netology_nginx$ curl http://172.17.0.2
 
 Для проверки правильности работы Nginx получим страницу в браузере Firefox на хосте (порт хоста 8080 проброшен на порт 80 в контейнер)
 
-![Отображение стартовой сраницы Nginx в Firefox](imgs/5.3-Img01.png)
+![Отображение стартовой сраницы Nginx в Firefox](https://github.com/OleKirs/virt-homeworks/blob/05-virt-03-docker/05-virt-03-docker/imgs/5.3-img01.jpg)
 
 ___
 ## Задача 2
