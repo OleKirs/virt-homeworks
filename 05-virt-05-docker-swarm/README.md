@@ -251,7 +251,6 @@ Changes to Outputs:
   + internal_ip_address_node05 = "192.168.101.15"
   + internal_ip_address_node06 = "192.168.101.16"
 
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
 Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.
 
@@ -287,6 +286,9 @@ internal_ip_address_node06 = "192.168.101.16"
 
 ```
 
+Подключимся к ВМ node01, повысим привилегии и выполним команду `docker node ls`
+
+![Результат выполнения команды `docker node ls`](Imgs/HW5.5-img1.png "HW5.5-img1")
 
 
 ___
@@ -301,7 +303,11 @@ docker service ls
 ```
   
 ### Решение
-  
+
+В консоли ВМ node01 выволним команду `docker service ls:
+
+![Результат выполнения команды `docker service ls`](Imgs/HW5.5-img2.png "HW5.5-img2") 
+ 
 ___
 
 ## Задача 4 (*)
