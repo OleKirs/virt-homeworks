@@ -25,7 +25,7 @@ docker node ls
   
 ### Решение
   
-#### Подготовим образ для развёртываемых ВМ:
+#### 2.1. Подготовим образ для развёртываемых ВМ:
 Инициализируем (повторно) профиль в Yandex облаке с помощью утилиты `yc`:
 ```shell
 root@D10:~/virt-homeworks/05-virt-04-docker-compose/src/packer# yc init
@@ -148,6 +148,146 @@ Build 'yandex' finished after 2 minutes 2 seconds.
 --> yandex: A disk image was created: centos-7-base (id: fd8795*******2jamnl) with family name centos
 ```
 **Образ подготовлен**
+
+Удалим оставшиеся от создания образа подсети и сети
+```shell
+root@deb10-gw-k11:~/virt-homeworks/05-virt-05-docker-swarm/src/terraform# yc vpc subnet list
++----------------------+-------------+----------------------+----------------+---------------+---------------+
+|          ID          |    NAME     |      NETWORK ID      | ROUTE TABLE ID |     ZONE      |     RANGE     |
++----------------------+-------------+----------------------+----------------+---------------+---------------+
+| e9b9a**********cgir2 | my-subnet-a | enp1***********pr0g  |                | ru-central1-a | [10.1.2.0/24] |
++----------------------+-------------+----------------------+----------------+---------------+---------------+
+
+root@deb10-gw-k11:~/virt-homeworks/05-virt-05-docker-swarm/src/terraform# yc vpc subnet delete e9b9a********cgir2
+done (2s)
+
+root@deb10-gw-k11:~/virt-homeworks/05-virt-05-docker-swarm/src/terraform# yc vpc network list
++----------------------+------+
+|          ID          | NAME |
++----------------------+------+
+| enp1****pr0g | net  |
++----------------------+------+
+
+root@deb10-gw-k11:~/virt-homeworks/05-virt-05-docker-swarm/src/terraform# yc vpc network delete enp1****pr0g
+```
+  
+#### 2.2. Создадим ВМ:
+  
+Перейдем в каталог с конфигурацией terraform и проверим правильность значений в файле `variables.tf`
+
+```shell
+
+root@D10:~/virt-homeworks/05-virt-05-docker-swarm/src/packer# cd ../terraform/
+
+root@D10:~/virt-homeworks/05-virt-05-docker-swarm/src/terraform# cat variables.tf
+# https://console.cloud.yandex.ru/cloud?section=overview
+variable "yandex_cloud_id" {
+  default = "b1g3a****nf2q"
+}
+
+# https://console.cloud.yandex.ru/cloud?section=overview
+variable "yandex_folder_id" {
+  default = "b1g8******0ih44"
+}
+
+# Image ID (from console YC or from command `yc compute image list`)
+variable "centos-7-base" {
+  default = "fd879*****jamnl"
+}
+```
+  
+Для автоматического развёртывания используем ранее сгенерированный ключ `key.json` (см. ["Получение IAM-токена для сервисного аккаунта"](https://cloud.yandex.ru/docs/iam/operations/iam-token/create-for-sa) )
+  
+Выполним инициализацию terraform:
+
+```shell
+root@D10:~/virt-homeworks/05-virt-05-docker-swarm/src/terraform#  terraform init
+
+Initializing the backend...
+
+Initializing provider plugins...
+- Reusing previous version of yandex-cloud/yandex from the dependency lock file
+- Reusing previous version of hashicorp/null from the dependency lock file
+- Reusing previous version of hashicorp/local from the dependency lock file
+- Using previously-installed yandex-cloud/yandex v0.71.0
+- Using previously-installed hashicorp/null v3.1.0
+- Using previously-installed hashicorp/local v2.1.0
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+```
+  
+Выполним предварительную оценку развертывания командой `terraform plan` (сокращённый вывод):
+```shell
+root@D10:~/virt-homeworks/05-virt-05-docker-swarm/src/terraform#  terraform plan
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+...
+
+Plan: 13 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + external_ip_address_node01 = (known after apply)
+  + external_ip_address_node02 = (known after apply)
+  + external_ip_address_node03 = (known after apply)
+  + external_ip_address_node04 = (known after apply)
+  + external_ip_address_node05 = (known after apply)
+  + external_ip_address_node06 = (known after apply)
+  + internal_ip_address_node01 = "192.168.101.11"
+  + internal_ip_address_node02 = "192.168.101.12"
+  + internal_ip_address_node03 = "192.168.101.13"
+  + internal_ip_address_node04 = "192.168.101.14"
+  + internal_ip_address_node05 = "192.168.101.15"
+  + internal_ip_address_node06 = "192.168.101.16"
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.
+
+```
+
+И запустим развёртывание командой `terraform apply` (сокращённый вывод):
+```shell
+root@D10:~/virt-homeworks/05-virt-05-docker-swarm/src/terraform#  terraform apply -auto-approve
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+...
+
+Apply complete! Resources: 13 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+external_ip_address_node01 = "51.250.0.8"
+external_ip_address_node02 = "51.250.1.222"
+external_ip_address_node03 = "51.250.4.181"
+external_ip_address_node04 = "51.250.1.61"
+external_ip_address_node05 = "51.250.2.21"
+external_ip_address_node06 = "51.250.11.245"
+internal_ip_address_node01 = "192.168.101.11"
+internal_ip_address_node02 = "192.168.101.12"
+internal_ip_address_node03 = "192.168.101.13"
+internal_ip_address_node04 = "192.168.101.14"
+internal_ip_address_node05 = "192.168.101.15"
+internal_ip_address_node06 = "192.168.101.16"
+
+```
+
+
 
 ___
 
