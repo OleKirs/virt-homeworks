@@ -48,6 +48,33 @@ AWS предоставляет достаточно много бесплатн�
    [здесь](https://cloud.yandex.ru/docs/solutions/infrastructure-management/terraform-quickstart).
 3. Внимание! В гит репозиторий нельзя пушить ваши личные ключи доступа к аккаунту. Поэтому в предыдущем задании мы указывали
 их в виде переменных окружения. 
+
+> Использовал сервисный аккаунт (SA) с размещением ключевой пары в файле `key.json`  
+> [**Аутентификация от имени сервисного аккаунта**](https://cloud.yandex.ru/docs/cli/operations/authentication/service-account)
+
+```shell
+.
+├── key.json
+├── main.tf
+├── meta.txt
+├── README.md
+├── terraform.tfstate
+├── terraform.tfstate.backup
+└── versions.tf
+
+0 directories, 7 files
+
+```
+>Настройки провайдера Yandex в файле `main.tf` для использования `Service account` при работе Terraform:
+>```hcl
+>provider "yandex" {
+>  service_account_key_file = file("key.json")
+>  cloud_id  = "b1gh06cb9in7v03k56qm"
+>  folder_id = "b1ghl566ok47p1fivpn9"
+>  zone      = "ru-central1-a"
+>}
+```
+
 4. В файле `main.tf` воспользуйтесь блоком `data "aws_ami` для поиска ami образа последнего Ubuntu.  
 5. В файле `main.tf` создайте рессурс 
    1. либо [ec2 instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance).
@@ -64,10 +91,133 @@ AWS предоставляет достаточно много бесплатн�
        * Идентификатор подсети в которой создан инстанс.  
 7. Если вы выполнили первый пункт, то добейтесь того, что бы команда `terraform plan` выполнялась без ошибок. 
 
+```shell
+root@deb11-test50:~/olekirs/07-terraform# terraform plan
+data.yandex_compute_image.ubuntu: Reading...
+data.yandex_compute_image.ubuntu: Read complete after 2s [id=fd81u2vhv3mc49l1ccbb]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # yandex_compute_instance.vm will be created
+  + resource "yandex_compute_instance" "vm" {
+      + created_at                = (known after apply)
+      + folder_id                 = (known after apply)
+      + fqdn                      = (known after apply)
+      + hostname                  = "ubu01.netology.test"
+      + id                        = (known after apply)
+      + metadata                  = {
+          + "user-data" = <<-EOT
+                #cloud-config
+                users:
+                  - name: sysadmin
+                    groups: sudo
+                    shell: /bin/bash
+                    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+                    ssh_authorized_keys:
+                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDFaeqemGCwv4VgiWEr4Ljlc+s9BozJSUIlHkmnYFBRo5uNk8qhibML9/q5LYqAhXUmZXw+PjOWOLP9GGyTi6a93qc5/GTuYipgqPAqf/Pc/kw87jm7ePJg4KIrWZ+hbSOguqkYEI9lwEbmaQKItvhp1ormF9df7FIfYGUc7cNJXF2crcrXLdrqFC/AWAfVNzzJUG4AanqGe64aCRnwC4evFOQTckDG2BmSJjCsPCdeL37XNiPT6Q5pTwiF3ani0vz+iM6As880xHOyqiCFDXE3U8PBfqTACzjPdmuYm3jhzLvZiJ0IQQnCT+OY+IW4nVWzucmKmx8KuEv7f3Zgwln1lvE5CwfoovUGf0B2qpOWMd8SZfSxDqcQRUKxNglnxKO2nRbuVTAQGG4HqpFWbqjBfFfeJk8c5vHAmgnTrFU4mF4eUu9bzx/frpZ2S62VxjJH71lBzPP6wGkRZkHm3D/3lQXoD+t5rMn3R6CT7Z72wo98MxVoLVdHWZmxHB60h4c= root@deb11-test50
+            EOT
+        }
+      + name                      = "ubu01"
+      + network_acceleration_type = "standard"
+      + platform_id               = "standard-v1"
+      + service_account_id        = (known after apply)
+      + status                    = (known after apply)
+      + zone                      = (known after apply)
+
+      + boot_disk {
+          + auto_delete = true
+          + device_name = (known after apply)
+          + disk_id     = (known after apply)
+          + mode        = (known after apply)
+
+          + initialize_params {
+              + block_size  = (known after apply)
+              + description = (known after apply)
+              + image_id    = "fd81u2vhv3mc49l1ccbb"
+              + name        = (known after apply)
+              + size        = 10
+              + snapshot_id = (known after apply)
+              + type        = "network-hdd"
+            }
+        }
+
+      + network_interface {
+          + index              = (known after apply)
+          + ip_address         = (known after apply)
+          + ipv4               = true
+          + ipv6               = false
+          + ipv6_address       = (known after apply)
+          + mac_address        = (known after apply)
+          + nat                = true
+          + nat_ip_address     = (known after apply)
+          + nat_ip_version     = (known after apply)
+          + security_group_ids = (known after apply)
+          + subnet_id          = (known after apply)
+        }
+
+      + placement_policy {
+          + host_affinity_rules = (known after apply)
+          + placement_group_id  = (known after apply)
+        }
+
+      + resources {
+          + core_fraction = 20
+          + cores         = 2
+          + memory        = 2
+        }
+
+      + scheduling_policy {
+          + preemptible = (known after apply)
+        }
+    }
+
+  # yandex_vpc_network.netology_net will be created
+  + resource "yandex_vpc_network" "netology_net" {
+      + created_at                = (known after apply)
+      + default_security_group_id = (known after apply)
+      + folder_id                 = (known after apply)
+      + id                        = (known after apply)
+      + labels                    = (known after apply)
+      + name                      = "netology_net"
+      + subnet_ids                = (known after apply)
+    }
+
+  # yandex_vpc_subnet.snet_172_17_4_0_22 will be created
+  + resource "yandex_vpc_subnet" "snet_172_17_4_0_22" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "snet_172_17_4_0_22"
+      + network_id     = (known after apply)
+      + v4_cidr_blocks = [
+          + "172.17.4.0/22",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-a"
+    }
+
+Plan: 3 to add, 0 to change, 0 to destroy.
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.
+root@deb11-test50:~/olekirs/07-terraform#
+```
 
 В качестве результата задания предоставьте:
 1. Ответ на вопрос: при помощи какого инструмента (из разобранных на прошлом занятии) можно создать свой образ ami?
-1. Ссылку на репозиторий с исходной конфигурацией терраформа.  
+  
+***Ответ:***  
+[Packer](https://www.packer.io/) is a tool for building identical machine images for multiple platforms from a single source configuration.  
+
+2. Ссылку на репозиторий с исходной конфигурацией терраформа. 
+  
+***Ответ:***  
+[https://github.com/OleKirs/07-terraform.git](https://github.com/OleKirs/07-terraform.git)
  
 ---
 
