@@ -34,6 +34,8 @@
 
 В качестве результата приложите ссылку на файлы `server.yaml` и `atlantis.yaml`.
 
+<img alt="Рис.2. Проверка с помощью Atlantis" src="https://github.com/OleKirs/virt-homeworks/blob/07-terraform-04-teamwork/07-terraform-04-teamwork/imgs/07-03_Pic_02.jpg" title="Рис.2. Проверка с помощью Atlantis"/>
+
 ## Задача 3. Знакомство с каталогом модулей. 
 
 1. В [каталоге модулей](https://registry.terraform.io/browse/modules) найдите официальный модуль от aws для создания
