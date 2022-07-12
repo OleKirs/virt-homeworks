@@ -1,0 +1,63 @@
+#
+# /etc/atlantis/repos.yaml
+
+repos:
+- id: github.com/OleKirs/07-terraform
+  branch: /.*/
+
+  apply_requirements: [approved, mergeable]
+
+  allowed_overrides: [apply_requirements, workflow, delete_source_branch_on_merge]
+
+  allowed_workflows: [wf1, custom]
+  workflow: wf1
+
+  allow_custom_workflows: true
+  delete_source_branch_on_merge: true
+
+#  pre_workflow_hooks:
+#    - run: pre-workflow-hook-command arg1
+#  post_workflow_hooks:
+#    - run: post-workflow-hook-command arg1
+
+#- id: github.com:OleKirs/test
+#  apply_requirements: [mergeable]
+#  branch: /.*/
+#  workflow: default
+
+workflows:
+  wf1:
+    plan:
+      steps:
+      - run: echo "wf1_plan_start"
+      - init
+      - plan:
+          extra_args: ["-lock", "false"]
+      - run: echo "wf1_plan_end"
+    apply:
+      steps:
+      - run: echo "wf1_apply_start"
+      - apply
+      - run: echo "wf1_apply_end"
+  custom:
+    plan:
+      steps:
+      - run: echo custom_plan
+      - init
+      - plan:
+          extra_args: ["-lock", "false"]
+      - run: custom-command arg1 arg2
+    apply:
+      steps:
+      - run: echo custom_apply
+      - apply
+  default:
+    plan:
+      steps:
+      - init
+      - run: echo default_plan
+      - plan:
+          extra_args: ["-lock", "false"]
+    apply:
+      steps:
+      - run: echo default_apply
