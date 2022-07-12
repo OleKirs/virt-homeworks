@@ -14,6 +14,8 @@
 
 В качестве результата задания приложите снимок экрана с успешным применением конфигурации.
 
+<img alt="Рис.1. Применение конфигурации в terraform cloud" src="https://github.com/OleKirs/virt-homeworks/blob/07-terraform-04-teamwork/07-terraform-04-teamwork/imgs/07-03_Pic_01.jpg" title="Рис.1. Применение конфигурации в terraform cloud"/>
+
 ## Задача 2. Написать серверный конфиг для атлантиса. 
 
 Смысл задания – познакомиться с документацией 
