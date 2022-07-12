@@ -33,7 +33,10 @@
 1. Необходимо включить автопланирование при изменении любых файлов `*.tf`.
 
 В качестве результата приложите ссылку на файлы `server.yaml` и `atlantis.yaml`.
-
+  
+Файлы:  
+* [atlantis.yaml](https://github.com/OleKirs/virt-homeworks/blob/07-terraform-04-teamwork/07-terraform-04-teamwork/atlantis/atlantis.yaml)  
+* [server.yaml](https://github.com/OleKirs/virt-homeworks/blob/07-terraform-04-teamwork/07-terraform-04-teamwork/atlantis/repos.yaml)
 <img alt="Рис.2. Проверка с помощью Atlantis" src="https://github.com/OleKirs/virt-homeworks/blob/07-terraform-04-teamwork/07-terraform-04-teamwork/imgs/07-03_Pic_02.jpg" title="Рис.2. Проверка с помощью Atlantis"/>
 
 ## Задача 3. Знакомство с каталогом модулей. 
@@ -41,11 +44,19 @@
 1. В [каталоге модулей](https://registry.terraform.io/browse/modules) найдите официальный модуль от aws для создания
 `ec2` инстансов. 
 2. Изучите как устроен модуль. Задумайтесь, будете ли в своем проекте использовать этот модуль или непосредственно 
-ресурс `aws_instance` без помощи модуля?
+ресурс `aws_instance` без помощи модуля?  
+
+> Пока выгода от модуля не перевесит недостатки стороннего модуля от его использования лучше воздержаться.  
+> Как вариант, можно скопировать его код и использовать как локальный модуль.
+
 3. В рамках предпоследнего задания был создан ec2 при помощи ресурса `aws_instance`. 
 Создайте аналогичный инстанс при помощи найденного модуля.   
 
 В качестве результата задания приложите ссылку на созданный блок конфигураций. 
+
+> Т.к. работы выполняю в Yandex Cloud в работе использовал модуль `yandex_vpc_network`[(отсюда)](https://registry.terraform.io/providers/yandex-cloud/yandex/0.75.0/docs/resources/vpc_network)
+>  для создания сети и подсетей из Registry.
+> Код в репозитории: [https://github.com/OleKirs/07-terraform.git](https://github.com/OleKirs/07-terraform.git)
 
 ---
 
