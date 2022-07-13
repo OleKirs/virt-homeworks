@@ -82,6 +82,16 @@ func main() {
 
 ```
 
+Результат выполнения кода:
+
+```commandline
+root@deb11-test50:~/golang# go run 1/Convert-Meters2Feets.go
+Input size (in meters):
+77
+This size is:  252.62466 feet(s)
+
+```
+
  </details>
 
 
@@ -122,6 +132,13 @@ func Min(arr []int) int {
 
 	return min
 }
+
+```
+Результат выполнения кода:
+
+```commandline
+root@deb11-test50:~/golang# go run 2/Find-MinimalValueFromSllice.go
+Minimal value is: 9
 
 ```
 
@@ -166,6 +183,15 @@ func main() {
 	fmt.Printf("Numbers from 1 to `limit` that may divide on `divider` without a remains: \n")
 	fmt.Printf("%v", FilterList())
 }
+
+```
+Результат выполнения кода:
+
+```commandline
+
+root@deb11-test50:~/golang# go run 3/t3.go
+Numbers from 1 to `limit` that may divide on `divider` without a remains:
+[3 6 9 12 15 18 21 24 27 30 33 36 39 42 45 48 51 54 57 60 63 66 69 72 75 78 81 84 87 90 93 96 99]
 
 ```
 
