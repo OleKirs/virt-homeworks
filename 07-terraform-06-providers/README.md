@@ -49,7 +49,29 @@
 > в файле ресурса не нашёл иначе, чем в определении функции
     > `resourceQueueCustomizeDiff`
 > [строка 427](https://github.com/hashicorp/terraform-provider-aws/blob/b9fd7aba413d3967d89f8d873432f910e5905bea/internal/service/sqs/queue.go#L427),
-> 
+
+```commandline
+var name string
+
+		if fifoQueue {
+			name = create.NameWithSuffix(diff.Get("name").(string), diff.Get("name_prefix").(string), FIFOQueueNameSuffix)
+		} else {
+			name = create.Name(diff.Get("name").(string), diff.Get("name_prefix").(string))
+		}
+
+		var re *regexp.Regexp  
+             
+		if fifoQueue {          //  <---- Проверка длины и соответствия на `Regexp` здесь
+			re = regexp.MustCompile(`^[a-zA-Z0-9_-]{1,75}\.fifo$`)
+		} else {
+			re = regexp.MustCompile(`^[a-zA-Z0-9_-]{1,80}$`)     // [ строка 427 ]
+		}
+
+		if !re.MatchString(name) {
+			return fmt.Errorf("invalid queue name: %s", name)
+		}
+```
+
 > Однако, в файле [main/internal/service/schemas/schema.go](https://github.com/hashicorp/terraform-provider-aws/blob/main/internal/service/schemas/schema.go)
 > есть схема с описанием `name` ( ( [строка 58](https://github.com/hashicorp/terraform-provider-aws/blob/b9fd7aba413d3967d89f8d873432f910e5905bea/internal/service/schemas/schema.go#L58) ). )
 > в которой указано определение `validation.StringLenBetween(1, 385),`:
